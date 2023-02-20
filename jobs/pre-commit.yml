@@ -1,0 +1,66 @@
+parameters:
+  - name: pythonVersion
+    type: string
+    default: "3.11"
+    values:
+      - "2.7"
+      - "3.6"
+      - "3.7"
+      - "3.8"
+      - "3.9"
+      - "3.10"
+      - "3.11"
+  - name: skipHooks
+    type: string
+    default: ""
+  - name: vmImage
+    type: string
+    default: "ubuntu-latest"
+    values:
+      - "ubuntu-20.04"
+      - "ubuntu-22.04"
+      - "ubuntu-latest"
+
+jobs:
+  - job: pre_commit
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
+    variables:
+      PRE_COMMIT_HOME: $(Pipeline.Workspace)/pre-commit-cache
+
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: ${{ parameters.pythonVersion }}
+        displayName: Use Python ${{ parameters.pythonVersion }}
+        name: PythonVersion
+
+      - script: |
+          echo "##vso[task.setvariable variable=PY;]$(python --version)"
+        displayName: Set Python version variable
+
+      - task: Cache@2
+        inputs:
+          key: py | "$(PY)" | "${{ parameters.vmImage }}"
+          path: $(PythonVersion.pythonLocation)
+        displayName: Configure Python caching
+
+      - task: Cache@2
+        inputs:
+          key: pre-commit | "$(PY)" | "${{ parameters.vmImage }}"  | .pre-commit-config.yaml
+          path: $(PRE_COMMIT_HOME)
+        displayName: Configure pre-commit caching
+
+      - script: |
+          echo "##vso[task.setvariable variable=SKIP;]${{ parameters.skipHooks }}"
+        displayName: Set skipped pre-commit hooks
+
+      - script: |
+          python -m pip install --upgrade pre-commit
+        displayName: Install dependencies
+
+      - script: |
+          pre-commit run --all-files --color=always
+        displayName: Run pre-commit

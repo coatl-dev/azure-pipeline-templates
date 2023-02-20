@@ -1,0 +1,7 @@
+trigger:
+  branches:
+    include:
+      - main
+
+jobs:
+  - template: jobs/pre-commit.yml

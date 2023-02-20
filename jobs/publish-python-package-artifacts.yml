@@ -1,0 +1,67 @@
+parameters:
+  - name: feedName
+    type: string
+  - name: projectName
+    type: string
+  - name: pythonVersion
+    type: string
+    default: "3.11"
+    values:
+      - "2.7"
+      - "3.6"
+      - "3.7"
+      - "3.8"
+      - "3.9"
+      - "3.10"
+      - "3.11"
+  - name: vmImage
+    type: string
+    default: "ubuntu-latest"
+    values:
+      - "ubuntu-20.04"
+      - "ubuntu-22.04"
+      - "ubuntu-latest"
+
+jobs:
+  - job: Publish
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: ${{ parameters.pythonVersion }}
+        displayName: Use Python ${{ parameters.pythonVersion }}
+        name: PythonVersion
+
+      - script: |
+          echo "##vso[task.setvariable variable=PY]$(python --version)"
+        displayName: Set Python version variable
+
+      - task: Cache@2
+        inputs:
+          key: py | "$(PY)" | "${{ parameters.vmImage }}"
+          path: $(PythonVersion.pythonLocation)
+        displayName: Configure Python caching
+
+      - script: |
+          python -m pip install --upgrade pip build twine
+        displayName: Install dependencies
+
+      - script: |
+          python -m build
+        displayName: Build package
+
+      - script: |
+          python -m twine check dist/*
+        displayName: Check package with Twine
+
+      - task: TwineAuthenticate@1
+        displayName: Twine Authenticate
+        inputs:
+          artifactFeed: "${{ parameters.projectName }}/${{ parameters.feedName }}"
+
+      - script: |
+          python -m twine upload --repository ${{ parameters.feedName }} --config-file $(PYPIRC_PATH) dist/*
+        displayName: Uploading Artifact
