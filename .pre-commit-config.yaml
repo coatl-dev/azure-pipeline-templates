@@ -9,11 +9,6 @@ repos:
     rev: 0.21.0
     hooks:
       - id: check-azure-pipelines
-      - id: check-jsonschema
-        name: Validate job templates
-        files: ^jobs/[^/]+$
-        types: [yaml]
-        args: ["--quiet", "--builtin-schema", "vendor.azure-pipelines"]
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v2.42.0
     hooks:

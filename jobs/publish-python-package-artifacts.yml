@@ -1,4 +1,7 @@
 parameters:
+  - name: cache
+    type: boolean
+    default: true
   - name: feedName
     type: string
   - name: projectName
@@ -40,6 +43,7 @@ jobs:
         displayName: Set Python version variable
 
       - task: Cache@2
+        condition: eq(${{ parameters.cache }}, true)
         inputs:
           key: py | "$(PY)" | "${{ parameters.vmImage }}"
           path: $(PythonVersion.pythonLocation)

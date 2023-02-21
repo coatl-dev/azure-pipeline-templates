@@ -1,4 +1,7 @@
 parameters:
+  - name: cache
+    type: boolean
+    default: true
   - name: pythonVersion
     type: string
     default: "3.11"
@@ -42,12 +45,14 @@ jobs:
         displayName: Set Python version variable
 
       - task: Cache@2
+        condition: eq(${{ parameters.cache }}, true)
         inputs:
           key: py | "$(PY)" | "${{ parameters.vmImage }}"
           path: $(PythonVersion.pythonLocation)
         displayName: Configure Python caching
 
       - task: Cache@2
+        condition: eq(${{ parameters.cache }}, true)
         inputs:
           key: pre-commit | "$(PY)" | "${{ parameters.vmImage }}"  | .pre-commit-config.yaml
           path: $(PRE_COMMIT_HOME)
