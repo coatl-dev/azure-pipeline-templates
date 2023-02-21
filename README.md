@@ -1,6 +1,7 @@
 # azure-pipeline-templates
 
 [![Build Status](https://dev.azure.com/coatl-dev/azure-pipeline-templates/_apis/build/status/azure-pipeline-templates?branchName=main)](https://dev.azure.com/coatl-dev/azure-pipeline-templates/_build/latest?definitionId=1&branchName=main)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/coatl-dev/azure-pipeline-templates/main.svg)](https://results.pre-commit.ci/latest/github/coatl-dev/azure-pipeline-templates/main)
 
 ## Usage
 
