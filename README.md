@@ -13,7 +13,7 @@ resources:
     - repository: templates
       type: github
       name: coatl-dev/azure-pipeline-templates
-      ref: refs/tags/v0.1.0
+      ref: refs/tags/v0.1.1
 ```
 
 This will make the templates in this repository available in the `templates` namespace.
