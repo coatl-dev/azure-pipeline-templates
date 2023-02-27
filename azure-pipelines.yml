@@ -3,5 +3,10 @@ trigger:
     include:
       - main
 
+pr:
+  branches:
+    include:
+      - main
+
 jobs:
   - template: jobs/pre-commit.yml
