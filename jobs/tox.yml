@@ -18,7 +18,7 @@ parameters:
       - "3.11"
   - name: vmImage
     type: string
-    default: "ubuntu-latest"
+    default: "ubuntu-20.04"
     values:
       - "ubuntu-20.04"
       - "ubuntu-22.04"

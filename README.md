@@ -35,7 +35,7 @@ Parameters:
   Useful when your `pre-commit-config.yaml` file contains [`local hooks`].
   Optional. See: [Temporarily disabling hooks](https://pre-commit.com/#temporarily-disabling-hooks).
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
-  Defaults to [`ubuntu-latest`].  Options: ([`ubuntu-20.04`], [`ubuntu-22.04`],
+  Defaults to [`ubuntu-20.04`].  Options: ([`ubuntu-20.04`], [`ubuntu-22.04`],
   [`ubuntu-latest`]).
 
 Example:
@@ -60,7 +60,7 @@ Parameters:
   publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
   and `"3.6"` through `"3.11"`)
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
-  Defaults to [`ubuntu-latest`]. Optional. Options: ([`ubuntu-20.04`],
+  Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
   [`ubuntu-22.04`], [`ubuntu-latest`]).
 
 Example:
@@ -91,7 +91,7 @@ Parameters:
   publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
   and `"3.6"` through `"3.11"`)
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
-  Defaults to [`ubuntu-latest`]. Optional. Options: ([`ubuntu-20.04`],
+  Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
   [`ubuntu-22.04`], [`ubuntu-latest`]).
 
 Example:
