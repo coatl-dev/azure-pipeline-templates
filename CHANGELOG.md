@@ -1,3 +1,9 @@
+## v0.1.2 (2023-02-28)
+
+### Refactor
+
+- **jobs**: use ubuntu-20.04 as the default vmImage (#3)
+
 ## v0.1.1 (2023-02-24)
 
 ### Refactor
