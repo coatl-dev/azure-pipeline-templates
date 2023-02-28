@@ -1,0 +1,58 @@
+parameters:
+  - name: cache
+    type: boolean
+    default: true
+  - name: pythonVersion
+    type: string
+    default: "3.11"
+    values:
+      - "2.7"
+      - "3.6"
+      - "3.7"
+      - "3.8"
+      - "3.9"
+      - "3.10"
+      - "3.11"
+  - name: sourcesRoot
+    type: string
+    default: "."
+  - name: vmImage
+    type: string
+    default: "ubuntu-20.04"
+    values:
+      - "ubuntu-20.04"
+      - "ubuntu-22.04"
+      - "ubuntu-latest"
+
+jobs:
+  - job: flake8
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: ${{ parameters.pythonVersion }}
+        displayName: Use Python ${{ parameters.pythonVersion }}
+        name: PythonVersion
+
+      - task: Cache@2
+        condition: eq(${{ parameters.cache }}, true)
+        inputs:
+          key: py | "$(PythonVersion.pythonLocation)" | "flake8" | "${{ parameters.vmImage }}"
+          path: $(PythonVersion.pythonLocation)
+        displayName: Configure Python caching
+
+      - script: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            'flake8==5.0.4' \
+            'mccabe==0.7.0' \
+            'pycodestyle==2.9.1' \
+            'pyflakes==2.5.0'
+        displayName: Install dependencies
+
+      - script: |
+          flake8 ${{ parameters.sourcesRoot }}
+        displayName: Check style and quality
