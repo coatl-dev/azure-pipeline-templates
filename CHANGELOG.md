@@ -1,3 +1,9 @@
+## v0.2.0 (2023-02-28)
+
+### Feat
+
+- **jobs**: add jobs targetting python 2.7 (#4)
+
 ## v0.1.2 (2023-02-28)
 
 ### Refactor
