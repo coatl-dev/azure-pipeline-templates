@@ -1,0 +1,48 @@
+parameters:
+  - name: cache
+    type: boolean
+    default: true
+  - name: pythonVersion
+    type: string
+    default: "3.11"
+    values:
+      - "3.7"
+      - "3.8"
+      - "3.9"
+      - "3.10"
+      - "3.11"
+  - name: vmImage
+    type: string
+    default: "ubuntu-20.04"
+    values:
+      - "ubuntu-20.04"
+      - "ubuntu-22.04"
+      - "ubuntu-latest"
+
+jobs:
+  - job: flake8
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: ${{ parameters.pythonVersion }}
+        displayName: Use Python ${{ parameters.pythonVersion }}
+        name: PythonVersion
+
+      - task: Cache@2
+        condition: eq(${{ parameters.cache }}, true)
+        inputs:
+          key: py | "$(PythonVersion.pythonLocation)" | "pylint" | "${{ parameters.vmImage }}"
+          path: $(PythonVersion.pythonLocation)
+        displayName: Configure Python caching
+
+      - script: |
+          python -m pip install --upgrade pip pylint
+        displayName: Install dependencies
+
+      - script: |
+          pylint $(git ls-files '*.py')
+        displayName: Analysing the code with pylint
