@@ -20,7 +20,7 @@ parameters:
       - "ubuntu-latest"
 
 jobs:
-  - job: flake8
+  - job: pylint
 
     pool:
       vmImage: ${{ parameters.vmImage }}
