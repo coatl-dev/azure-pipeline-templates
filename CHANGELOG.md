@@ -1,3 +1,13 @@
+## v0.3.0 (2023-03-01)
+
+### Feat
+
+- **jobs**: add pylint template (#5)
+
+### Refactor
+
+- **jobs**: use latest Python version based on package requirements (#6)
+
 ## v0.2.0 (2023-02-28)
 
 ### Feat

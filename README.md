@@ -7,13 +7,13 @@
 
 First, create a [GitHub service connection]. Then this to the beginning of your `azure-pipelines.yml`:
 
-```yaml
+```yml
 resources:
   repositories:
     - repository: templates
       type: github
       name: coatl-dev/azure-pipeline-templates
-      ref: refs/tags/v0.2.0
+      ref: refs/tags/v0.3.0
 ```
 
 This will make the templates in this repository available in the `templates` namespace.
@@ -25,24 +25,26 @@ This will make the templates in this repository available in the `templates` nam
 This job template will install Python and invoke `black` to run against your
 Python 2.7 code.
 
-> Note: This essentially installs `black[python2]==21.9b0`, which is the last
-version of black that did not warn about Python 2 deprecation.
+**Notes**:
 
-Parameters:
+- :information_source: This essentially installs `black[python2]==21.9b0`, which is the last
+version of black that did not warn about Python 2 deprecation.
+- :warning: This release requires `python>=3.6.2`.
+
+**Parameters**:
 
 - `cache` (`boolean`): If `true`, files and dependencies will be cached between
-  pipeline runs. Defaults to `true`.
-- `pythonVersion` (`string`): The Python version to use for building and
-  publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
-  and `"3.6"` through `"3.11"`)
+  pipeline runs. Optional. Defaults to `true`.
+- `pythonVersion` (`string`): The Python version to use from the tool cache.
+  Defaults to `"3.11"`. Optional. Options: (`"3.6"` through `"3.11"`).
 - `sourcesRoot` (`string`):
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
   Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
   [`ubuntu-22.04`], [`ubuntu-latest`]).
 
-Example:
+**Example**:
 
-```yaml
+```yml
 stages:
   - stage: style
     jobs:
@@ -56,23 +58,25 @@ stages:
 This workflow will install Python and invoke `flake8` to run against your
 Python 2.7 code.
 
-> Note: This essentially installs `flake8==5.0.4`, which includes the last
-version of `pyflakes` to support Python 2 [type comments].
+**Notes**:
 
-Inputs:
+- :information_source: This essentially installs `flake8==5.0.4`, which includes the last
+version of `pyflakes` to support Python 2 [type comments].
+- :warning: The latest `flake8` release requires `python>=3.6.1`.
+
+**Parameters**:
 
 - `cache` (`boolean`): If `true`, files and dependencies will be cached between
-  pipeline runs. Defaults to `true`.
-- `pythonVersion` (`string`): The Python version to use for building and
-  publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
-  and `"3.6"` through `"3.11"`)
+  pipeline runs. Optional. Defaults to `true`.
+- `pythonVersion` (`string`): The Python version to use from the tool cache.
+  Defaults to `"3.11"`. Optional. Options: (`"3.6"` through `"3.11"`).
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
   Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
   [`ubuntu-22.04`], [`ubuntu-latest`]).
 
-Example:
+**Example**:
 
-```yaml
+```yml
 stages:
   - stage: lint
     jobs:
@@ -86,21 +90,23 @@ stages:
 This workflow will install Python and invoke `mypy` to run against your
 Python 2.7 code.
 
-> Note: This essentially installs `mypy[python2]==0.971`, which was the last
-release officially supporting Python 2.
+**Notes**:
 
-Inputs:
+- :information_source: This essentially installs `mypy[python2]==0.971`,
+  which was the last release officially supporting Python 2.
+- :warning: This release requires `python>=3.6;<3.11`.
+
+**Parameters**:
 
 - `cache` (`boolean`): If `true`, files and dependencies will be cached between
-  pipeline runs. Defaults to `true`.
-- `pythonVersion` (`string`): The Python version to use for building and
-  publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
-  and `"3.6"` through `"3.11"`)
+  pipeline runs. Optional. Defaults to `true`.
+- `pythonVersion` (`string`): The Python version to use from the tool cache.
+  Defaults to `"3.10"`. Optional. Options: (`"3.6"` through `"3.10"`).
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
   Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
   [`ubuntu-22.04`], [`ubuntu-latest`]).
 
-Example:
+**Example**:
 
 `mypy.ini`:
 
@@ -117,7 +123,7 @@ enable_error_code = ignore-without-code
 types-enum34
 ```
 
-```yaml
+```yml
 stages:
   - stage: typecheck
     jobs:
@@ -129,15 +135,18 @@ stages:
 
 ### jobs/pre-commit.yml
 
-This template will install Python and invoke `pre-commit.
+This template will install Python and invoke [`pre-commit`].
 
-Parameters:
+**Notes**:
+
+- :warning: The latest `pre-commit` release requires `python>=3.8`.
+
+**Parameters**:
 
 - `cache` (`boolean`): If `true`, files and dependencies will be cached between
-  pipeline runs. Defaults to `true`.
-- `pythonVersion` (`string`): The Python version to use for building and
-  publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
-  and `"3.6"` through `"3.11"`)
+  pipeline runs. Optional. Defaults to `true`.
+- `pythonVersion` (`string`): The Python version to use from the tool cache.
+  Defaults to `"3.11"`. Optional. Options: (`"3.8"` through `"3.11"`).
 - `skipHooks`: A comma separated list of hook ids which will be disabled.
   Useful when your `pre-commit-config.yaml` file contains [`local hooks`].
   Optional. See: [Temporarily disabling hooks](https://pre-commit.com/#temporarily-disabling-hooks).
@@ -145,9 +154,9 @@ Parameters:
   Defaults to [`ubuntu-20.04`].  Options: ([`ubuntu-20.04`], [`ubuntu-22.04`],
   [`ubuntu-latest`]).
 
-Example:
+**Example**:
 
-```yaml
+```yml
 jobs:
   - template: jobs/pre-commit.yml@templates
     parameters:
@@ -159,20 +168,20 @@ jobs:
 This template will allow you to upload your Python distribution packages in the
 `dist/` directory to Azure Artifact feeds using `build` and `twine`.
 
-Parameters:
+**Parameters**:
 
 - `cache` (`boolean`): If `true`, files and dependencies will be cached between
-  pipeline runs. Defaults to `true`.
+  pipeline runs. Optional. Defaults to `true`.
 - `pythonVersion` (`string`): The Python version to use for building and
   publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
-  and `"3.6"` through `"3.11"`)
+  and `"3.6"` through `"3.11"`).
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
   Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
   [`ubuntu-22.04`], [`ubuntu-latest`]).
 
-Example:
+**Example**:
 
-```yaml
+```yml
 stages:
   - stage: deploy
     dependsOn: test
@@ -184,26 +193,77 @@ stages:
           pythonVersion: "3.10"
 ```
 
-### jobs/tox.yml
+### jobs/pylint.yml
 
-This job template will install Python and invoke `tox`.
+This job temnplate will install Python and invoke `pylint` to analyze your code.
 
-Parameters:
+**Notes**:
+
+- :warning: The latest `pylint` release requires `python>=3.7.2`.
+
+**Parameters**:
 
 - `cache` (`boolean`): If `true`, files and dependencies will be cached between
-  pipeline runs. Defaults to `true`.
-- `preCommit` (`boolean`): If set to `true`, this means [`pre-commit`] will be
-  invoked inside a `tox` environment. Defaults to `false`. Optional.
+  pipeline runs. Optional. Defaults to `true`.
 - `pythonVersion` (`string`): The Python version to use for building and
   publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
-  and `"3.6"` through `"3.11"`)
+  and `"3.7"` through `"3.11"`).
 - `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
   Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
   [`ubuntu-22.04`], [`ubuntu-latest`]).
 
-Example:
+**Example**:
 
-```yaml
+```yml
+jobs:
+  - template: jobs/pylint.yml@templates
+    parameters:
+      pythonVersion: "3.10"
+      vmImage: ubuntu-latest
+```
+
+Or, along with [jobs/pre-commit](#jobspre-commityml):
+
+```yml
+stages:
+  - stage: lint
+    jobs:
+      - template: jobs/pre-commit.yml@templates
+        parameters:
+          pythonVersion: "3.10"
+          vmImage: ubuntu-latest
+          skipHooks: "pylint"
+
+      - template: jobs/pylint.yml@templates
+        parameters:
+          pythonVersion: "3.10"
+          vmImage: ubuntu-latest
+```
+
+### jobs/tox.yml
+
+This job template will install Python and invoke `tox`.
+
+**Notes**:
+
+- :warning: The latest `tox` release requires `python>=3.7`.
+
+**Parameters**:
+
+- `cache` (`boolean`): If `true`, files and dependencies will be cached between
+  pipeline runs. Optional. Defaults to `true`.
+- `preCommit` (`boolean`): If set to `true`, this means [`pre-commit`] will be
+  invoked inside a `tox` environment. Defaults to `false`. Optional.
+- `pythonVersion` (`string`): The Python version to use for building and
+  publishing the package. Defaults to `"3.11"`. Optional. Options: (`"2.7"`,
+  and `"3.7"` through `"3.11"`).
+- `vmImage` (`string`): Name of the VM Image to use for running the pipeline.
+  Defaults to [`ubuntu-20.04`]. Optional. Options: ([`ubuntu-20.04`],
+  [`ubuntu-22.04`], [`ubuntu-latest`]).
+
+**Example**:
+
+```yml
 stages:
   - stage: test
     jobs:
