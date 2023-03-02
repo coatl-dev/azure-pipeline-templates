@@ -44,6 +44,14 @@ version of black that did not warn about Python 2 deprecation.
 
 **Example**:
 
+`pyproject.toml`:
+
+```toml
+[tool.black]
+line-length = 88
+target-version = ["py27"]
+```
+
 ```yml
 stages:
   - stage: style
