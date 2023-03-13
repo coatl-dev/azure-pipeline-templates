@@ -9,7 +9,7 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.21.0
+    rev: 0.22.0
     hooks:
       - id: check-azure-pipelines
   - repo: https://github.com/commitizen-tools/commitizen
